@@ -1,10 +1,13 @@
-const  HomeePage  = () => {
+import Hero from "@/components/hero"
+import Features from "@/components/features"
 
+const HomePage = () => {
   return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
+    <>
+      <Hero />
+      <Features />
+    </>
   )
-} 
+}
 
-export default HomeePage
+export default HomePage
