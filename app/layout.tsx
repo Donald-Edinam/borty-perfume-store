@@ -3,6 +3,7 @@ import { Jost } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { AuthProvider } from "@/components/auth-provider";
 
 const jost = Jost({
   variable: "--font-jost",
@@ -24,9 +25,11 @@ export default function RootLayout({
       <body
         className={`${jost.variable} antialiased`}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
