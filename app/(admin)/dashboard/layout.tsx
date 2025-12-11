@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Sidebar } from "@/components/admin/sidebar";
 
 interface DashboardLayoutProps {
     children: ReactNode;
@@ -9,13 +10,15 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <div className="min-h-screen bg-muted/40">
             {/* Admin dashboard layout wrapper */}
             <div className="flex">
-                {/* Sidebar can go here */}
-                <aside className="hidden lg:block w-64 border-r bg-background">
-                    {/* Sidebar content */}
+                {/* Sidebar */}
+                <aside className="hidden lg:block w-64 border-r bg-background fixed h-full z-10">
+                    <Sidebar />
                 </aside>
 
-                <main className="flex-1">
-                    {children}
+                <main className="flex-1 lg:pl-64">
+                    <div className="p-8">
+                        {children}
+                    </div>
                 </main>
             </div>
         </div>
@@ -23,3 +26,4 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 };
 
 export default DashboardLayout;
+
