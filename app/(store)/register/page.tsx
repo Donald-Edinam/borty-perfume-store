@@ -112,7 +112,7 @@ export default function RegisterPage() {
                                 id="name"
                                 name="name"
                                 type="text"
-                                placeholder="John Doe"
+                                placeholder="Ama Borty"
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
@@ -126,7 +126,7 @@ export default function RegisterPage() {
                                 id="email"
                                 name="email"
                                 type="email"
-                                placeholder="you@example.com"
+                                placeholder="email@bortystore.com"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
@@ -135,7 +135,7 @@ export default function RegisterPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="phone">Phone (Optional)</Label>
+                            <Label htmlFor="phone">Phone *</Label>
                             <Input
                                 id="phone"
                                 name="phone"
