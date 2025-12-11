@@ -17,7 +17,7 @@ import { Eye } from "lucide-react";
 
 type OrderWithDetails = Order & {
     user: User;
-    orderItems: OrderItem[];
+    items: OrderItem[];
 };
 
 interface OrderClientProps {
@@ -74,7 +74,7 @@ export function OrderClient({ data }: OrderClientProps) {
                                     <Select
                                         disabled={loadingId === order.id}
                                         onValueChange={(value) => onStatusChange(order.id, value as OrderStatus)}
-                                        defaultValue={order.status}
+                                        defaultValue={order.orderStatus}
                                     >
                                         <SelectTrigger className="w-[130px] h-8">
                                             <SelectValue placeholder="Status" />

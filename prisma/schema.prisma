@@ -64,10 +64,12 @@ enum Role {
 }
 
 model Category {
-  id        String    @id @default(cuid())
-  name      String
-  products  Product[]
-  createdAt DateTime  @default(now())
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Product {
@@ -141,4 +143,12 @@ model Banner {
   imageUrl  String
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
+}
+
+model StoreSettings {
+  id              String   @id @default(cuid())
+  storeName       String   @default("Borty Perfume Store")
+  maintenanceMode Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

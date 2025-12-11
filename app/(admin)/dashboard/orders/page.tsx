@@ -5,7 +5,11 @@ export default async function OrdersPage() {
     const orders = await prisma.order.findMany({
         include: {
             user: true,
-            orderItems: true,
+            items: {
+                include: {
+                    product: true
+                }
+            }
         },
         orderBy: {
             createdAt: "desc",

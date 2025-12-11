@@ -30,7 +30,6 @@ import { Plus, Pencil } from "lucide-react";
 const formSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     description: z.string().optional(),
-    imageUrl: z.string().optional(),
 });
 
 interface CategoryFormProps {
@@ -47,28 +46,35 @@ export function CategoryForm({ category }: CategoryFormProps) {
         defaultValues: {
             name: category?.name || "",
             description: category?.description || "",
-            imageUrl: category?.imageUrl || "",
         },
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
+        console.log("Form submitting with values:", values);
         const formData = new FormData();
         formData.append("name", values.name);
         if (values.description) formData.append("description", values.description);
-        if (values.imageUrl) formData.append("imageUrl", values.imageUrl);
 
         try {
+            let result;
             if (category) {
-                await updateCategory(category.id, null, formData);
+                result = await updateCategory(category.id, null, formData);
             } else {
-                await createCategory(null, formData);
+                result = await createCategory(null, formData);
             }
-            setOpen(false);
-            form.reset();
-            router.refresh();
+            console.log("Server action result:", result);
+
+            if (result.success) {
+                setOpen(false);
+                form.reset();
+                router.refresh();
+            } else {
+                console.error("Server action failed:", result.message);
+                alert(result.message); // Temporary alert for debugging
+            }
         } catch (error) {
-            console.error(error);
+            console.error("Form submission error:", error);
         } finally {
             setIsLoading(false);
         }

@@ -8,7 +8,7 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
     try {
         await prisma.order.update({
             where: { id },
-            data: { status },
+            data: { orderStatus: status },
         });
 
         revalidatePath("/dashboard/orders");

@@ -7,28 +7,31 @@ import { z } from "zod";
 const CategorySchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     description: z.string().optional(),
-    imageUrl: z.string().optional(),
 });
 
 export async function createCategory(prevState: any, formData: FormData) {
     try {
+        console.log("=== CREATE CATEGORY START ===");
         const rawData = {
             name: formData.get("name") as string,
             description: formData.get("description") as string,
-            imageUrl: formData.get("imageUrl") as string,
         };
+        console.log("Raw data:", rawData);
 
         const validatedData = CategorySchema.parse(rawData);
+        console.log("Validated data:", validatedData);
 
-        await prisma.category.create({
+        const result = await prisma.category.create({
             data: validatedData,
         });
+        console.log("Created category:", result);
 
         revalidatePath("/dashboard/categories");
         return { message: "Category created successfully", success: true };
     } catch (error) {
+        console.error("=== CREATE CATEGORY ERROR ===", error);
         if (error instanceof z.ZodError) {
-            return { message: error.errors[0].message, success: false };
+            return { message: error.issues[0].message, success: false };
         }
         return { message: "Failed to create category", success: false };
     }
@@ -51,7 +54,6 @@ export async function updateCategory(id: string, prevState: any, formData: FormD
         const rawData = {
             name: formData.get("name") as string,
             description: formData.get("description") as string,
-            imageUrl: formData.get("imageUrl") as string,
         };
 
         const validatedData = CategorySchema.parse(rawData);
@@ -65,7 +67,7 @@ export async function updateCategory(id: string, prevState: any, formData: FormD
         return { message: "Category updated successfully", success: true };
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return { message: error.errors[0].message, success: false };
+            return { message: error.issues[0].message, success: false };
         }
         return { message: "Failed to update category", success: false };
     }

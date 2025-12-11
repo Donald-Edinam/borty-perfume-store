@@ -28,7 +28,7 @@ export async function createBanner(prevState: any, formData: FormData) {
         return { message: "Banner created successfully", success: true };
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return { message: error.errors[0].message, success: false };
+            return { message: error.issues[0].message, success: false };
         }
         return { message: "Failed to create banner", success: false };
     }
@@ -53,7 +53,7 @@ export async function updateBanner(id: string, prevState: any, formData: FormDat
         return { message: "Banner updated successfully", success: true };
     } catch (error) {
         if (error instanceof z.ZodError) {
-            return { message: error.errors[0].message, success: false };
+            return { message: error.issues[0].message, success: false };
         }
         return { message: "Failed to update banner", success: false };
     }

@@ -41,7 +41,7 @@ export async function createProduct(prevState: any, formData: FormData) {
                 stock: validatedData.stock,
                 categoryId: validatedData.categoryId,
                 isFeatured: validatedData.isFeatured || false,
-                isArchived: validatedData.isArchived || false,
+                isActive: !validatedData.isArchived,
                 images: validatedData.images, // Storing as string[] in Postgres (Prisma supports scalar lists)
             },
         });
@@ -51,7 +51,7 @@ export async function createProduct(prevState: any, formData: FormData) {
     } catch (error) {
         console.error(error);
         if (error instanceof z.ZodError) {
-            return { message: error.errors[0].message, success: false };
+            return { message: error.issues[0].message, success: false };
         }
         return { message: "Failed to create product", success: false };
     }
@@ -81,7 +81,7 @@ export async function updateProduct(id: string, prevState: any, formData: FormDa
                 stock: validatedData.stock,
                 categoryId: validatedData.categoryId,
                 isFeatured: validatedData.isFeatured || false,
-                isArchived: validatedData.isArchived || false,
+                isActive: !validatedData.isArchived,
                 images: validatedData.images,
             },
         });
@@ -91,7 +91,7 @@ export async function updateProduct(id: string, prevState: any, formData: FormDa
     } catch (error) {
         console.error(error);
         if (error instanceof z.ZodError) {
-            return { message: error.errors[0].message, success: false };
+            return { message: error.issues[0].message, success: false };
         }
         return { message: "Failed to update product", success: false };
     }
