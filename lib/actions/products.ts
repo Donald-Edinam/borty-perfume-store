@@ -6,6 +6,7 @@ import { z } from "zod";
 
 const ProductSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
+    brand: z.string().min(1, "Brand is required"),
     description: z.string().optional(),
     price: z.coerce.number().min(0, "Price must be a positive number"),
     stock: z.coerce.number().int().min(0, "Stock must be a positive integer"),
@@ -19,6 +20,7 @@ export async function createProduct(prevState: any, formData: FormData) {
     try {
         const rawData = {
             name: formData.get("name") as string,
+            brand: formData.get("brand") as string,
             description: formData.get("description") as string,
             price: formData.get("price"),
             stock: formData.get("stock"),
@@ -36,6 +38,7 @@ export async function createProduct(prevState: any, formData: FormData) {
         await prisma.product.create({
             data: {
                 name: validatedData.name,
+                brand: validatedData.brand,
                 description: validatedData.description || "",
                 price: validatedData.price,
                 stock: validatedData.stock,
@@ -61,6 +64,7 @@ export async function updateProduct(id: string, prevState: any, formData: FormDa
     try {
         const rawData = {
             name: formData.get("name") as string,
+            brand: formData.get("brand") as string,
             description: formData.get("description") as string,
             price: formData.get("price"),
             stock: formData.get("stock"),
@@ -76,6 +80,7 @@ export async function updateProduct(id: string, prevState: any, formData: FormDa
             where: { id },
             data: {
                 name: validatedData.name,
+                brand: validatedData.brand,
                 description: validatedData.description || "",
                 price: validatedData.price,
                 stock: validatedData.stock,

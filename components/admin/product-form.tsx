@@ -34,6 +34,7 @@ import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
+    brand: z.string().min(1, "Brand is required"),
     description: z.string().optional(),
     price: z.coerce.number().min(0, "Price must be a positive number"),
     stock: z.coerce.number().int().min(0, "Stock must be a positive integer"),
@@ -64,6 +65,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: product?.name || "",
+            brand: product?.brand || "",
             description: product?.description || "",
             price: product?.price ? Number(product.price) : 0,
             stock: product?.stock || 0,
@@ -78,6 +80,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
         setIsLoading(true);
         const formData = new FormData();
         formData.append("name", values.name);
+        formData.append("brand", values.brand);
         if (values.description) formData.append("description", values.description);
         formData.append("price", String(values.price));
         formData.append("stock", String(values.stock));
@@ -153,6 +156,22 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                                     </FormItem>
                                 )}
                             />
+                            <FormField
+                                control={form.control}
+                                name="brand"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Brand</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Brand Name" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
                             <FormField
                                 control={form.control}
                                 name="price"
