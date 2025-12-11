@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?  @unique
+  address   String?
+  password  String
+  role      Role     @default(CUSTOMER)
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  name      String
+  products  Product[]
+  createdAt DateTime    @default(now())
+}
+
+model Product {
+  id             String     @id @default(cuid())
+  name           String
+  brand          String
+  categoryId     String
+  category       Category   @relation(fields: [categoryId], references: [id])
+  fragranceType  String?    // floral, woody, citrus, oriental
+  concentration  String?    // EDP, EDT, Parfum
+  sizeML         Int?
+  price          Float
+  stock          Int        @default(0)
+  description    String?
+  notes          Json?      // Top/Middle/Base notes
+  images         String[]   // Cloudinary URLs
+  isFeatured     Boolean    @default(false)
+  isActive       Boolean    @default(true)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  orderItems     OrderItem[]
+}
+
+model Order {
+  id             String         @id @default(cuid())
+  userId         String
+  user           User           @relation(fields: [userId], references: [id])
+  items          OrderItem[]
+  totalAmount    Float
+  paymentMethod  PaymentMethod
+  paymentStatus  PaymentStatus  @default(PENDING)
+  orderStatus    OrderStatus    @default(PENDING)
+  momoReference  String?        // Paystack ref
+  phone          String
+  address        String?
+  createdAt      DateTime       @default(now())
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String
+  quantity    Int
+  priceAtPurchase Float
+  order       Order    @relation(fields: [orderId], references: [id])
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+enum PaymentMethod {
+  CASH
+  MOMO
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  title     String?
+  subtitle  String?
+  imageUrl  String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
