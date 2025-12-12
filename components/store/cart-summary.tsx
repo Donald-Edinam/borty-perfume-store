@@ -4,18 +4,29 @@ import { useCartStore } from "@/lib/store/cart";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ShoppingBag } from "lucide-react";
-import Link from "next/link";
-
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useCurrency } from "@/components/providers/currency-provider";
 
 export function CartSummary() {
     const { currency } = useCurrency();
     const { totalPrice, totalItems } = useCartStore();
+    const router = useRouter();
+    const { data: session } = useSession();
+
     const subtotal = totalPrice();
     const shipping = 10.00; // Flat rate for now
     // Tax disabled for now
     const tax = 0;
     const total = subtotal + shipping + tax;
+
+    const handleCheckout = () => {
+        if (!session) {
+            router.push("/login?callbackUrl=/checkout");
+            return;
+        }
+        router.push("/checkout");
+    };
 
     return (
         <div className="bg-gray-50 rounded-lg p-6 lg:sticky lg:top-24">
@@ -45,11 +56,9 @@ export function CartSummary() {
                 <span>{currency} {total.toFixed(2)}</span>
             </div>
 
-            <Button className="w-full" size="lg" asChild>
-                <Link href="/checkout">
-                    <ShoppingBag className="mr-2 h-4 w-4" />
-                    Proceed to Checkout
-                </Link>
+            <Button className="w-full" size="lg" onClick={handleCheckout}>
+                <ShoppingBag className="mr-2 h-4 w-4" />
+                Proceed to Checkout
             </Button>
 
             <p className="text-xs text-gray-500 text-center mt-4">

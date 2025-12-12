@@ -6,6 +6,27 @@ import { authOptions } from "@/lib/auth.config";
 import { PaymentMethod, PaymentStatus } from "@prisma/client";
 import { CartItem } from "@/types/shop";
 
+export async function getUserProfile() {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) return null;
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email },
+            select: {
+                name: true,
+                phone: true,
+                email: true,
+                // address: true // Intentionally not fetching address as requested
+            }
+        });
+        return user;
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        return null;
+    }
+}
+
 interface CheckoutData {
     name: string;
     phone: string;

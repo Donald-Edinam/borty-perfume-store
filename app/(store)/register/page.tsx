@@ -17,7 +17,6 @@ export default function RegisterPage() {
         password: "",
         confirmPassword: "",
         phone: "",
-        address: "",
     });
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +56,6 @@ export default function RegisterPage() {
                     email: formData.email,
                     password: formData.password,
                     phone: formData.phone || undefined,
-                    address: formData.address || undefined,
                 }),
             });
 
@@ -148,19 +146,6 @@ export default function RegisterPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="address">Address (Optional)</Label>
-                            <Input
-                                id="address"
-                                name="address"
-                                type="text"
-                                placeholder="123 Main St, Accra"
-                                value={formData.address}
-                                onChange={handleChange}
-                                disabled={isLoading}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
                             <Label htmlFor="password">Password *</Label>
                             <Input
                                 id="password"
@@ -192,7 +177,7 @@ export default function RegisterPage() {
                         </div>
                     </CardContent>
 
-                    <CardFooter className="flex flex-col gap-4">
+                    <CardFooter className="flex flex-col gap-4 mt-5">
                         <Button
                             type="submit"
                             className="w-full"

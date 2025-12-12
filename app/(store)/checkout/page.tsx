@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCartStore } from "@/lib/store/cart";
 import { useCurrency } from "@/components/providers/currency-provider";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { createOrder } from "@/lib/actions/checkout";
+import { createOrder, getUserProfile } from "@/lib/actions/checkout";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
@@ -22,11 +22,29 @@ export default function CheckoutPage() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
-        name: session?.user?.name || "",
+        name: "",
         phone: "",
         address: "",
         paymentMethod: "CASH" as "CASH" | "MOMO"
     });
+
+    // Fetch user profile to pre-fill data
+    useEffect(() => {
+        async function loadProfile() {
+            if (session?.user) {
+                const profile = await getUserProfile();
+                if (profile) {
+                    setFormData(prev => ({
+                        ...prev,
+                        name: profile.name || session.user.name || "",
+                        phone: profile.phone || "",
+                        // Address not pre-filled as requested
+                    }));
+                }
+            }
+        }
+        loadProfile();
+    }, [session]);
     const [error, setError] = useState("");
 
     const subtotal = totalPrice();
