@@ -5,17 +5,19 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 const BannerSchema = z.object({
-    label: z.string().min(1, "Label is required"),
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
     imageUrl: z.string().min(1, "Image is required"),
-    active: z.boolean().default(true).optional(),
+    isActive: z.boolean().default(true).optional(),
 });
 
 export async function createBanner(prevState: any, formData: FormData) {
     try {
         const rawData = {
-            label: formData.get("label") as string,
+            title: formData.get("title") as string,
+            subtitle: formData.get("subtitle") as string,
             imageUrl: formData.get("imageUrl") as string,
-            active: formData.get("active") === "true",
+            isActive: formData.get("isActive") === "true",
         };
 
         const validatedData = BannerSchema.parse(rawData);
@@ -37,9 +39,10 @@ export async function createBanner(prevState: any, formData: FormData) {
 export async function updateBanner(id: string, prevState: any, formData: FormData) {
     try {
         const rawData = {
-            label: formData.get("label") as string,
+            title: formData.get("title") as string,
+            subtitle: formData.get("subtitle") as string,
             imageUrl: formData.get("imageUrl") as string,
-            active: formData.get("active") === "true",
+            isActive: formData.get("isActive") === "true",
         };
 
         const validatedData = BannerSchema.parse(rawData);

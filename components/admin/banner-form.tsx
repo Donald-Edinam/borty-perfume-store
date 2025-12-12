@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
     Form,
     FormControl,
@@ -24,9 +25,10 @@ import { Plus, Pencil } from "lucide-react";
 import ImageUpload from "@/components/ui/image-upload";
 
 const formSchema = z.object({
-    label: z.string().min(1, "Label is required"),
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
     imageUrl: z.string().min(1, "Image is required"),
-    active: z.boolean().default(true).optional(),
+    isActive: z.boolean().default(true).optional(),
 });
 
 interface BannerFormProps {
@@ -41,28 +43,37 @@ export function BannerForm({ banner }: BannerFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            label: banner?.label || "",
+            title: banner?.title || "",
+            subtitle: banner?.subtitle || "",
             imageUrl: banner?.imageUrl || "",
-            active: banner?.active || true,
+            isActive: banner?.isActive ?? true,
         },
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         const formData = new FormData();
-        formData.append("label", values.label);
+        if (values.title) formData.append("title", values.title);
+        if (values.subtitle) formData.append("subtitle", values.subtitle);
         formData.append("imageUrl", values.imageUrl);
-        formData.append("active", String(values.active));
+        formData.append("isActive", String(values.isActive));
 
         try {
+            let result;
             if (banner) {
-                await updateBanner(banner.id, null, formData);
+                result = await updateBanner(banner.id, null, formData);
             } else {
-                await createBanner(null, formData);
+                result = await createBanner(null, formData);
             }
-            setOpen(false);
-            form.reset();
-            router.refresh();
+
+            if (result.success) {
+                setOpen(false);
+                form.reset();
+                router.refresh();
+            } else {
+                console.error("Banner action failed:", result.message);
+                alert(result.message);
+            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -109,12 +120,12 @@ export function BannerForm({ banner }: BannerFormProps) {
                         />
                         <FormField
                             control={form.control}
-                            name="label"
+                            name="title"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Label</FormLabel>
+                                    <FormLabel>Title (Optional)</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Banner Label" {...field} />
+                                        <Input placeholder="Banner Title" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -122,7 +133,20 @@ export function BannerForm({ banner }: BannerFormProps) {
                         />
                         <FormField
                             control={form.control}
-                            name="active"
+                            name="subtitle"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Subtitle (Optional)</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Banner Subtitle" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="isActive"
                             render={({ field }) => (
                                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                     <FormControl>

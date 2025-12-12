@@ -10,6 +10,7 @@ export async function getStoreSettings() {
         settings = await prisma.storeSettings.create({
             data: {
                 storeName: "Borty Perfume Store",
+                currency: "GHS",
                 maintenanceMode: false,
             },
         });
@@ -18,18 +19,24 @@ export async function getStoreSettings() {
     return settings;
 }
 
-export async function updateStoreSettings(maintenanceMode: boolean) {
+export async function updateStoreSettings(data: { maintenanceMode?: boolean; currency?: string }) {
     try {
         const settings = await prisma.storeSettings.findFirst();
 
         if (settings) {
             await prisma.storeSettings.update({
                 where: { id: settings.id },
-                data: { maintenanceMode }
+                data: {
+                    ...(data.maintenanceMode !== undefined && { maintenanceMode: data.maintenanceMode }),
+                    ...(data.currency && { currency: data.currency }),
+                }
             });
         } else {
             await prisma.storeSettings.create({
-                data: { maintenanceMode }
+                data: {
+                    maintenanceMode: data.maintenanceMode ?? false,
+                    currency: data.currency ?? "GHS",
+                }
             });
         }
 
