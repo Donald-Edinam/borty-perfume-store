@@ -17,7 +17,7 @@ const Navbar = () => {
     if (!isHomePage) return;
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 300);
     };
 
     window.addEventListener("scroll", handleScroll);
