@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { verifyTransaction } from "@/lib/actions/paystack";
 import { updateOrderStatus } from "@/lib/actions/checkout";
 import { useCartStore } from "@/lib/store/cart";
@@ -9,9 +9,10 @@ import { Loader2, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default function OrderVerifyPage({ params }: { params: { id: string } }) {
+export default function OrderVerifyPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const params = useParams<{ id: string }>();
     const { clearCart } = useCartStore();
     const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
     const [message, setMessage] = useState("Verifying payment...");
