@@ -4,6 +4,7 @@ import { Logo } from "@/components/logo";
 import { NavMenu } from "@/components/nav-menu";
 import { NavigationSheet } from "@/components/navigation-sheet";
 import { UserNav } from "@/components/user-nav";
+import { CartIndicator } from "@/components/store/cart-indicator";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -42,6 +43,7 @@ const Navbar = () => {
         <NavMenu className="hidden md:block" isTransparent={isTransparent} />
 
         <div className="flex items-center gap-3">
+          <CartIndicator isTransparent={isTransparent} />
           <UserNav isTransparent={isTransparent} />
 
           {/* Mobile Menu */}

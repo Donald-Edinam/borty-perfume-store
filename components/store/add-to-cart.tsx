@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Minus, Plus, ShoppingCart, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/cart";
@@ -14,7 +14,15 @@ interface AddToCartProps {
 export function AddToCart({ product }: AddToCartProps) {
     const [quantity, setQuantity] = useState(1);
     const [isAdded, setIsAdded] = useState(false);
-    const addItem = useCartStore((state) => state.addItem);
+    const [isMounted, setIsMounted] = useState(false);
+    const { addItem, items } = useCartStore();
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const cartItem = isMounted ? items.find(item => item.id === product.id) : null;
+    const isInCart = !!cartItem;
 
     const handleIncrement = () => {
         setQuantity((prev) => Math.min(prev + 1, product.stock));
@@ -72,7 +80,7 @@ export function AddToCart({ product }: AddToCartProps) {
                 <Button
                     className={cn(
                         "flex-1 h-10 transition-all duration-300",
-                        isAdded ? "bg-green-600 hover:bg-green-700" : ""
+                        isAdded || isInCart ? "bg-green-600 hover:bg-green-700" : ""
                     )}
                     onClick={handleAddToCart}
                     disabled={isAdded}
@@ -81,6 +89,11 @@ export function AddToCart({ product }: AddToCartProps) {
                         <>
                             <Check className="h-5 w-5 mr-2" />
                             Added to Cart
+                        </>
+                    ) : isInCart ? (
+                        <>
+                            <Check className="h-5 w-5 mr-2" />
+                            In Cart ({cartItem?.quantity}) - Add More
                         </>
                     ) : (
                         <>
