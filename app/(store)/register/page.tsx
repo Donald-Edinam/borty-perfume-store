@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 export default function RegisterPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get("callbackUrl") || "/";
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -78,7 +80,7 @@ export default function RegisterPage() {
                 setError("Registration successful, but login failed. Please try logging in.");
                 setIsLoading(false);
             } else {
-                router.push("/");
+                router.push(callbackUrl);
                 router.refresh();
             }
         } catch (error) {
@@ -188,7 +190,7 @@ export default function RegisterPage() {
 
                         <p className="text-sm text-muted-foreground text-center">
                             Already have an account?{" "}
-                            <Link href="/login" className="text-primary hover:underline">
+                            <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl === "/" ? "" : callbackUrl)}`} className="text-primary hover:underline">
                                 Sign in
                             </Link>
                         </p>
