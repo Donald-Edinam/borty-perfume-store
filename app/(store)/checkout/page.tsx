@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { createOrder, getUserProfile } from "@/lib/actions/checkout";
+import { initializeTransaction } from "@/lib/actions/paystack";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
@@ -67,6 +68,8 @@ export default function CheckoutPage() {
         setError("");
 
         try {
+            // 1. Create the Order in PENDING status (or whatever default is)
+            // Note: checkout action creates order with PENDING payment status by default
             const result = await createOrder({
                 ...formData,
                 items,
@@ -74,15 +77,54 @@ export default function CheckoutPage() {
                 paymentMethod: formData.paymentMethod
             });
 
-            if (result.success) {
+            if (!result.success || !result.orderId) {
+                setError(result.error || "Failed to place order");
+                setIsLoading(false);
+                return;
+            }
+
+            // 2. Handle Payment Flow
+            if (formData.paymentMethod === "MOMO") {
+                // Initialize Paystack
+                // Callback URL needs to be absolute or handle domain correctly if server-side only?
+                // initializeTransaction is a server action, so we can pass a relative path if we Construct full URL there?
+                // Actually it's safer to construct full URL here or in action using headers headers().get('host')
+                // For simplicity, let's assume we can pass the path and let action verify or just generic URL
+                // Let's pass the window.location.origin if available or hardcode for now
+                // "app/(store)/orders/[id]/verify/page.tsx" is the target
+
+                const callbackUrl = `${window.location.origin}/orders/${result.orderId}/verify`;
+
+                const paystackInit = await initializeTransaction(
+                    session?.user?.email || "guest@bortyperfume.store", // Fallback email needed? User must be logged in per createOrder checks
+                    total,
+                    callbackUrl,
+                    {
+                        orderId: result.orderId,
+                        custom_fields: [
+                            { display_name: "Order ID", variable_name: "order_id", value: result.orderId }
+                        ]
+                    }
+                );
+
+                if (paystackInit.success && paystackInit.authorization_url) {
+                    // Redirect to Paystack
+                    // Note: We do NOT clear cart yet. Cart should be cleared only after successful payment verification.
+                    // But if we redirect away, the cart state (local storage) remains. 
+                    // Upon return to "success" page, we can clear it.
+                    window.location.href = paystackInit.authorization_url;
+                } else {
+                    setError("Failed to initialize payment: " + paystackInit.error);
+                    setIsLoading(false);
+                }
+
+            } else {
+                // CASH Payment - Success immediately
                 clearCart();
                 router.push(`/orders/${result.orderId}/success`);
-            } else {
-                setError(result.error || "Failed to place order");
             }
         } catch (error) {
             setError("Something went wrong. Please try again.");
-        } finally {
             setIsLoading(false);
         }
     };

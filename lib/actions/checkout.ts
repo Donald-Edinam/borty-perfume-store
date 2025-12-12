@@ -123,3 +123,37 @@ export async function createOrder(data: CheckoutData) {
         return { success: false, error: "Failed to place order. Please try again." };
     }
 }
+
+export async function updateOrderStatus(orderId: string, status: "PAID" | "FAILED") {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session?.user?.id) {
+            return { success: false, error: "Unauthorized" };
+        }
+
+        // Map simplified status to PaymentStatus Enum
+        const paymentStatus = status === "PAID" ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
+
+        const order = await prisma.order.findUnique({
+            where: { id: orderId }
+        });
+
+        if (!order) {
+            return { success: false, error: "Order not found" };
+        }
+
+        // Update
+        await prisma.order.update({
+            where: { id: orderId },
+            data: {
+                paymentStatus: paymentStatus
+            }
+        });
+
+        return { success: true };
+
+    } catch (error) {
+        console.error("Update Order Status Error:", error);
+        return { success: false, error: "Failed to update order status" };
+    }
+}
