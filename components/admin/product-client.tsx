@@ -92,7 +92,7 @@ export function ProductClient({ data, categories }: ProductClientProps) {
                                 <TableCell>{product.category.name}</TableCell>
                                 <TableCell>${Number(product.price).toFixed(2)}</TableCell>
                                 <TableCell>{product.stock}</TableCell>
-                                <TableCell>{product.isArchived ? "Archived" : "Active"}</TableCell>
+                                <TableCell>{product.isActive ? "Active" : "Inactive"}</TableCell>
                                 <TableCell className="flex gap-2 items-center h-full pt-4">
                                     <ProductForm product={product} categories={categories} />
                                     <Button

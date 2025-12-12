@@ -9,7 +9,6 @@ import { deleteCategory } from "@/lib/actions/categories";
 import { useRouter } from "next/navigation";
 import { CategoryForm } from "./category-form";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { toast } from "@/hooks/use-toast" // Might need to create this hook or use a library
 
 interface CategoryClientProps {
     data: Category[];

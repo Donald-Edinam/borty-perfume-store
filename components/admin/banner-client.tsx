@@ -70,7 +70,7 @@ export function BannerClient({ data }: BannerClientProps) {
                                             <Image
                                                 fill
                                                 src={banner.imageUrl}
-                                                alt={banner.label}
+                                                alt={banner.title || "Banner"}
                                                 className="object-cover"
                                             />
                                         </div>
@@ -80,8 +80,8 @@ export function BannerClient({ data }: BannerClientProps) {
                                         </div>
                                     )}
                                 </TableCell>
-                                <TableCell className="font-medium">{banner.label}</TableCell>
-                                <TableCell>{banner.active ? "Yes" : "No"}</TableCell>
+                                <TableCell className="font-medium">{banner.title || "Untitled"}</TableCell>
+                                <TableCell>{banner.isActive ? "Yes" : "No"}</TableCell>
                                 <TableCell className="flex gap-2 items-center h-full pt-4">
                                     <BannerForm banner={banner} />
                                     <Button

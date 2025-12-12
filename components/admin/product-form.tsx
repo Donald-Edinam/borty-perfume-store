@@ -28,7 +28,6 @@ import { useState } from "react";
 import { createProduct, updateProduct } from "@/lib/actions/products";
 import { useRouter } from "next/navigation";
 import { Product, Category } from "@prisma/client";
-import { p } from "framer-motion/client";
 import { Plus, Pencil } from "lucide-react";
 import ImageUpload from "@/components/ui/image-upload";
 
@@ -36,13 +35,15 @@ const formSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     brand: z.string().min(1, "Brand is required"),
     description: z.string().optional(),
-    price: z.coerce.number().min(0, "Price must be a positive number"),
-    stock: z.coerce.number().int().min(0, "Stock must be a positive integer"),
+    price: z.number().min(0, "Price must be a positive number"),
+    stock: z.number().int().min(0, "Stock must be a positive integer"),
     categoryId: z.string().min(1, "Category is required"),
     images: z.array(z.string()).min(1, "At least one image is required"),
     isFeatured: z.boolean().default(false).optional(),
-    isArchived: z.boolean().default(false).optional(),
+    isActive: z.boolean().default(true).optional(),
 });
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
     product?: Product;
@@ -61,7 +62,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
     // OR if it's just the form/modal.
     // In CategoryForm, I made it handle the button too. I'll do the same here.
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: product?.name || "",
@@ -72,7 +73,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             categoryId: product?.categoryId || "",
             images: product?.images || [],
             isFeatured: product?.isFeatured || false,
-            isArchived: product?.isArchived || false,
+            isActive: product?.isActive ?? true,
         },
     });
 
@@ -87,7 +88,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
         formData.append("categoryId", values.categoryId);
         formData.append("images", JSON.stringify(values.images));
         formData.append("isFeatured", String(values.isFeatured));
-        formData.append("isArchived", String(values.isArchived));
+        formData.append("isActive", String(values.isActive));
 
         try {
             if (product) {
@@ -179,7 +180,12 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                                     <FormItem>
                                         <FormLabel>Price</FormLabel>
                                         <FormControl>
-                                            <Input type="number" placeholder="9.99" {...field} />
+                                            <Input
+                                                type="number"
+                                                placeholder="9.99"
+                                                {...field}
+                                                onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -209,7 +215,12 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                                     <FormItem>
                                         <FormLabel>Stock</FormLabel>
                                         <FormControl>
-                                            <Input type="number" placeholder="10" {...field} />
+                                            <Input
+                                                type="number"
+                                                placeholder="10"
+                                                {...field}
+                                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -264,7 +275,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                             />
                             <FormField
                                 control={form.control}
-                                name="isArchived"
+                                name="isActive"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                                         <FormControl>
@@ -274,9 +285,9 @@ export function ProductForm({ product, categories }: ProductFormProps) {
                                             />
                                         </FormControl>
                                         <div className="space-y-1 leading-none">
-                                            <FormLabel>Archived</FormLabel>
+                                            <FormLabel>Active</FormLabel>
                                             <FormDescription>
-                                                This product will not appear anywhere in the store
+                                                This product will appear in the store
                                             </FormDescription>
                                         </div>
                                     </FormItem>
