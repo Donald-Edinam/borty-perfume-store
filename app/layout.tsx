@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import { AuthProvider } from "@/components/auth-provider";
+import { ConditionalFooter } from "@/components/conditional-footer";
 
 const jost = Jost({
   variable: "--font-jost",
@@ -28,7 +28,7 @@ export default function RootLayout({
         <AuthProvider>
           <Navbar />
           {children}
-          <Footer />
+          <ConditionalFooter />
         </AuthProvider>
       </body>
     </html>
