@@ -1,23 +1,52 @@
+"use client";
+
 import { Logo } from "@/components/logo";
 import { NavMenu } from "@/components/nav-menu";
 import { NavigationSheet } from "@/components/navigation-sheet";
 import { UserNav } from "@/components/user-nav";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+
+  useEffect(() => {
+    if (!isHomePage) return;
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHomePage]);
+
+  const isTransparent = isHomePage && !isScrolled;
+
   return (
-    <nav className="h-16 bg-background border-b">
+    <nav
+      className={cn(
+        "h-16 z-50 transition-all duration-300",
+        isTransparent
+          ? "absolute top-0 left-0 right-0 bg-transparent !text-white"
+          : "sticky top-0 bg-background/95 backdrop-blur-sm border-b shadow-sm"
+      )}
+    >
       <div className="h-full flex items-center justify-between max-w-(--breakpoint-xl) mx-auto px-4 sm:px-6 lg:px-8">
-        <Logo />
+        <Logo className={isTransparent ? "!text-white" : ""} />
 
         {/* Desktop Menu */}
-        <NavMenu className="hidden md:block" />
+        <NavMenu className="hidden md:block" isTransparent={isTransparent} />
 
         <div className="flex items-center gap-3">
-          <UserNav />
+          <UserNav isTransparent={isTransparent} />
 
           {/* Mobile Menu */}
           <div className="md:hidden">
-            <NavigationSheet />
+            <NavigationSheet isTransparent={isTransparent} />
           </div>
         </div>
       </div>

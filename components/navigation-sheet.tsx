@@ -9,8 +9,13 @@ import { Menu } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { NavMenu } from "@/components/nav-menu";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { cn } from "@/lib/utils";
 
-export const NavigationSheet = () => {
+interface NavigationSheetProps {
+  isTransparent?: boolean;
+}
+
+export const NavigationSheet = ({ isTransparent }: NavigationSheetProps) => {
   return (
     <Sheet>
       <VisuallyHidden>
@@ -18,7 +23,11 @@ export const NavigationSheet = () => {
       </VisuallyHidden>
 
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button
+          variant={isTransparent ? "ghost" : "outline"}
+          size="icon"
+          className={cn(isTransparent && "!text-white hover:!text-white/90 hover:bg-white/10 border-white/30")}
+        >
           <Menu />
         </Button>
       </SheetTrigger>

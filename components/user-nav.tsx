@@ -13,8 +13,13 @@ import {
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { User, LogOut, ShoppingBag, LayoutDashboard } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function UserNav() {
+interface UserNavProps {
+    isTransparent?: boolean;
+}
+
+export function UserNav({ isTransparent }: UserNavProps) {
     const { data: session, status } = useSession();
 
     if (status === "loading") {
@@ -24,10 +29,19 @@ export function UserNav() {
     if (!session?.user) {
         return (
             <div className="flex items-center gap-2">
-                <Button variant="ghost" asChild>
+                <Button
+                    variant={isTransparent ? "ghost" : "ghost"}
+                    asChild
+                    className={cn(isTransparent && "!text-white hover:!text-white/90 hover:bg-white/10")}
+                >
                     <Link href="/login">Login</Link>
                 </Button>
-                <Button asChild>
+                <Button
+                    asChild
+                    className={cn(
+                        isTransparent && "bg-white !text-black hover:bg-white/90"
+                    )}
+                >
                     <Link href="/register">Sign Up</Link>
                 </Button>
             </div>
@@ -43,9 +57,17 @@ export function UserNav() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button
+                    variant="ghost"
+                    className={cn(
+                        "relative h-8 w-8 rounded-full",
+                        isTransparent && "hover:bg-white/10"
+                    )}
+                >
                     <Avatar className="h-8 w-8">
-                        <AvatarFallback>{initials}</AvatarFallback>
+                        <AvatarFallback className={cn(isTransparent && "bg-white text-black")}>
+                            {initials}
+                        </AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
