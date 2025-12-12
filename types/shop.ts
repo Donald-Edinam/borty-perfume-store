@@ -18,6 +18,33 @@ export interface FilterOptions {
     priceRange: { min: number; max: number };
 }
 
+export interface ProductNotes {
+    top: string[];
+    middle: string[];
+    base: string[];
+}
+
+export interface Product {
+    id: string;
+    name: string;
+    brand: string;
+    price: number;
+    description: string | null;
+    images: string[];
+    stock: number;
+    fragranceType: string | null;
+    concentration: string | null;
+    sizeML: number | null;
+    notes: ProductNotes | null;
+    category: Category;
+    isFeatured: boolean;
+    isActive: boolean;
+}
+
+export interface CartItem extends Product {
+    quantity: number;
+}
+
 export interface PaginationInfo {
     currentPage: number;
     totalPages: number;
