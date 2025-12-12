@@ -1,6 +1,7 @@
 import { Category } from "@prisma/client";
 
 export interface ProductFilters {
+    search?: string;
     categories?: string[];
     brands?: string[];
     fragranceTypes?: string[];

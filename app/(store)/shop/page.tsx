@@ -10,6 +10,7 @@ import {
     getSortOrder,
     ITEMS_PER_PAGE,
 } from "@/lib/utils/filters";
+import { buildSearchQuery, rankSearchResults } from "@/lib/utils/search";
 import { FilterOptions } from "@/types/shop";
 
 interface ShopPageProps {
@@ -83,11 +84,24 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     };
 
     // Build query
-    const where = buildFilterQuery(filters);
+    const filterQuery = buildFilterQuery(filters);
+    const searchQuery = buildSearchQuery(filters.search || "");
+
+    // Merge search and filter queries
+    const where = filters.search
+        ? {
+            AND: [
+                { isActive: true },
+                searchQuery,
+                filterQuery,
+            ],
+        }
+        : { ...filterQuery, isActive: true };
+
     const orderBy = getSortOrder(filters.sort);
 
     // Fetch products and total count
-    const [products, totalCount] = await Promise.all([
+    let [products, totalCount] = await Promise.all([
         prisma.product.findMany({
             where,
             include: { category: true },
@@ -97,6 +111,11 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         }),
         prisma.product.count({ where }),
     ]);
+
+    // Rank search results by relevance if searching
+    if (filters.search) {
+        products = rankSearchResults(products, filters.search);
+    }
 
     const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 

@@ -11,6 +11,10 @@ export function parseSearchParams(searchParams: URLSearchParams): ProductFilters
         sort: (searchParams.get("sort") as ProductFilters["sort"]) || "newest",
     };
 
+    // Parse search query
+    const search = searchParams.get("search");
+    if (search) filters.search = search;
+
     // Parse array filters
     const categories = searchParams.get("categories");
     if (categories) filters.categories = categories.split(",");
@@ -80,6 +84,10 @@ export function getSortOrder(sort: ProductFilters["sort"]) {
  */
 export function buildSearchParams(filters: Partial<ProductFilters>): string {
     const params = new URLSearchParams();
+
+    if (filters.search) {
+        params.set("search", filters.search);
+    }
 
     if (filters.categories?.length) {
         params.set("categories", filters.categories.join(","));

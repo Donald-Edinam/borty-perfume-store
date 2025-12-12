@@ -4,13 +4,15 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Slider } from "@/components/ui/slider";
-import { SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { FilterOptions } from "@/types/shop";
 import { buildSearchParams } from "@/lib/utils/filters";
 import { Separator } from "@/components/ui/separator";
+import { useDebouncedCallback } from "use-debounce";
 
 interface ProductFiltersProps {
     options: FilterOptions;
@@ -22,14 +24,49 @@ export function ProductFilters({ options }: ProductFiltersProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     // Parse current filters from URL
+    const currentSearch = searchParams.get("search") || "";
     const currentCategories = searchParams.get("categories")?.split(",") || [];
     const currentBrands = searchParams.get("brands")?.split(",") || [];
     const currentFragranceTypes = searchParams.get("fragranceTypes")?.split(",") || [];
     const currentMinPrice = parseFloat(searchParams.get("minPrice") || String(options.priceRange.min));
     const currentMaxPrice = parseFloat(searchParams.get("maxPrice") || String(options.priceRange.max));
 
-    // Local state for price range
+    // Local state for price range and search
     const [priceRange, setPriceRange] = useState([currentMinPrice, currentMaxPrice]);
+    const [searchQuery, setSearchQuery] = useState(currentSearch);
+
+    // Debounced search update
+    const debouncedSearch = useDebouncedCallback((value: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        if (value.trim()) {
+            params.set("search", value.trim());
+        } else {
+            params.delete("search");
+        }
+
+        // Reset to page 1 when search changes
+        params.delete("page");
+
+        const queryString = params.toString();
+        router.push(queryString ? `/shop?${queryString}` : "/shop");
+    }, 300);
+
+    // Handle search input change
+    const handleSearchChange = (value: string) => {
+        setSearchQuery(value);
+        debouncedSearch(value);
+    };
+
+    // Clear search
+    const clearSearch = () => {
+        setSearchQuery("");
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("search");
+        params.delete("page");
+        const queryString = params.toString();
+        router.push(queryString ? `/shop?${queryString}` : "/shop");
+    };
 
     // Update filters in URL
     const updateFilter = (key: string, value: string[]) => {
@@ -80,13 +117,15 @@ export function ProductFilters({ options }: ProductFiltersProps) {
 
     // Clear all filters
     const clearFilters = () => {
+        setSearchQuery("");
         setPriceRange([options.priceRange.min, options.priceRange.max]);
         router.push("/shop");
         setIsOpen(false);
     };
 
-    // Count active filters
+    // Count active filters (including search)
     const activeFilterCount =
+        (searchQuery ? 1 : 0) +
         currentCategories.length +
         currentBrands.length +
         currentFragranceTypes.length +
@@ -95,6 +134,37 @@ export function ProductFilters({ options }: ProductFiltersProps) {
 
     const FiltersContent = () => (
         <div className="space-y-6 mx-4 sm:mx-6 md:mx-8 lg:mx-10">
+            {/* Search Input */}
+            <div>
+                <Label htmlFor="search-input" className="text-sm font-semibold mb-2 block">
+                    Search Products
+                </Label>
+                <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                        id="search-input"
+                        type="text"
+                        placeholder="Search by name, brand, fragrance..."
+                        value={searchQuery}
+                        onChange={(e) => handleSearchChange(e.target.value)}
+                        className="pl-10 pr-10"
+                    />
+                    {searchQuery && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={clearSearch}
+                            className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                            aria-label="Clear search"
+                        >
+                            <X className="h-4 w-4" />
+                        </Button>
+                    )}
+                </div>
+            </div>
+
+            <Separator />
+
             {/* Active Filters Count */}
             {activeFilterCount > 0 && (
                 <div className="flex items-center justify-between">
