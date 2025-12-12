@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
@@ -56,18 +58,18 @@ interface ProductCardProps {
 
 function ProductCard({ product, currencySymbol }: ProductCardProps) {
     return (
-        <Link href={`/products/${product.id}`} className="group">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+        <Link href={`/products/${product.id}`} className="group block">
+            <div className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                 {/* Product Image */}
-                <div className="relative h-64 bg-gray-100">
+                <div className="relative bg-gray-50 p-8 flex items-center justify-center min-h-[280px]">
                     {product.images[0] ? (
                         <img
                             src={product.images[0]}
                             alt={product.name}
-                            className="w-full h-full object-cover"
+                            className="h-48 w-auto object-contain"
                         />
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <div className="h-48 flex items-center justify-center text-gray-400">
                             No Image
                         </div>
                     )}
@@ -79,26 +81,35 @@ function ProductCard({ product, currencySymbol }: ProductCardProps) {
                 </div>
 
                 {/* Product Info */}
-                <div className="p-4">
-                    <p className="text-sm text-gray-500 mb-1">{product.category.name}</p>
-                    <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors line-clamp-1">
+                <div className="p-5 text-center">
+                    {/* Brand */}
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">
+                        {product.brand}
+                    </p>
+
+                    {/* Product Name */}
+                    <h3 className="text-base font-medium text-gray-900 mb-3 line-clamp-1">
                         {product.name}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-2">{product.brand}</p>
-                    <div className="flex items-center justify-between">
-                        <span className="text-xl font-bold text-primary">
-                            {currencySymbol}
-                            {product.price.toFixed(2)}
-                        </span>
-                        <Button
-                            size="sm"
-                            className="opacity-0 group-hover:opacity-100 transition-opacity"
-                            disabled={product.stock === 0}
-                        >
-                            <ShoppingCart className="h-4 w-4 mr-1" />
-                            Add
-                        </Button>
-                    </div>
+
+                    {/* Price */}
+                    <p className="text-xl font-bold text-gray-900 mb-4">
+                        {currencySymbol}{product.price.toFixed(2)}
+                    </p>
+
+                    {/* Add to Cart Button */}
+                    <Button
+                        size="sm"
+                        className="w-full"
+                        disabled={product.stock === 0}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            // Add to cart logic here
+                        }}
+                    >
+                        <ShoppingCart className="h-4 w-4 mr-2" />
+                        Add to Cart
+                    </Button>
                 </div>
             </div>
         </Link>
