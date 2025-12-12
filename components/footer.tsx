@@ -75,13 +75,44 @@ const footerSections = [
 const Footer = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="grow bg-muted" />
+      {/* <div className="grow bg-muted" /> */}
       <footer className="border-t">
+        {/* Video Showcase Section */}
+        <div className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent z-10"></div>
+
+          <div className="relative h-[40vh] overflow-hidden">
+            <video
+              className="absolute w-full h-full object-cover opacity-40"
+              autoPlay
+              muted
+              loop
+              playsInline
+            >
+              <source src="https://videos.pexels.com/video-files/6894223/6894223-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+
+            <div className="relative z-20 h-full flex flex-col items-center justify-center px-4 text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Discover Your Signature Scent</h2>
+              <p className="text-lg text-gray-300 max-w-2xl mb-8">Explore our curated collection of premium fragrances and find the perfect scent that defines you.</p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button className="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                  Shop Now
+                </button>
+                <button className="bg-transparent hover:bg-white/10 border border-white text-white font-medium py-3 px-6 rounded-lg transition-colors">
+                  View Collections
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="max-w-(--breakpoint-xl) mx-auto">
           <div className="py-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-x-8 gap-y-10 px-6 xl:px-0">
             <div className="col-span-full xl:col-span-2">
               {/* Logo */}
-                <Logo />
+              <Logo />
 
               <p className="mt-4 text-muted-foreground">
                 Design amazing digital experiences that create more happy in the
