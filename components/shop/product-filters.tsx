@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -35,6 +35,16 @@ export function ProductFilters({ options }: ProductFiltersProps) {
     const [priceRange, setPriceRange] = useState([currentMinPrice, currentMaxPrice]);
     const [searchQuery, setSearchQuery] = useState(currentSearch);
 
+    // Track if user is actively typing to prevent focus loss
+    const isTypingRef = useRef(false);
+
+    // Sync search query with URL only when URL changes externally (not from typing)
+    useEffect(() => {
+        if (!isTypingRef.current) {
+            setSearchQuery(currentSearch);
+        }
+    }, [currentSearch]);
+
     // Debounced search update
     const debouncedSearch = useDebouncedCallback((value: string) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -49,11 +59,15 @@ export function ProductFilters({ options }: ProductFiltersProps) {
         params.delete("page");
 
         const queryString = params.toString();
-        router.push(queryString ? `/shop?${queryString}` : "/shop");
+        router.replace(queryString ? `/shop?${queryString}` : "/shop", { scroll: false });
+
+        // Mark typing as complete after debounce
+        isTypingRef.current = false;
     }, 300);
 
     // Handle search input change
     const handleSearchChange = (value: string) => {
+        isTypingRef.current = true;
         setSearchQuery(value);
         debouncedSearch(value);
     };
@@ -132,7 +146,7 @@ export function ProductFilters({ options }: ProductFiltersProps) {
         (currentMinPrice > options.priceRange.min ? 1 : 0) +
         (currentMaxPrice < options.priceRange.max ? 1 : 0);
 
-    const FiltersContent = () => (
+    const filtersContent = (
         <div className="space-y-6 mx-4 sm:mx-6 md:mx-8 lg:mx-10">
             {/* Search Input */}
             <div>
@@ -310,7 +324,7 @@ export function ProductFilters({ options }: ProductFiltersProps) {
                             <SheetTitle>Filters</SheetTitle>
                         </SheetHeader>
                         <div className="mt-6">
-                            <FiltersContent />
+                            {filtersContent}
                         </div>
                     </SheetContent>
                 </Sheet>
@@ -328,7 +342,7 @@ export function ProductFilters({ options }: ProductFiltersProps) {
                             </Button>
                         )}
                     </div>
-                    <FiltersContent />
+                    {filtersContent}
                 </div>
             </div>
         </>
