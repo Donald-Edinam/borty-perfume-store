@@ -11,7 +11,10 @@ interface CartItemProps {
     item: CartItemType;
 }
 
+import { useCurrency } from "@/components/providers/currency-provider";
+
 export function CartItem({ item }: CartItemProps) {
+    const { currency } = useCurrency();
     const { updateQuantity, removeItem } = useCartStore();
 
     const handleIncrement = () => {
@@ -82,7 +85,7 @@ export function CartItem({ item }: CartItemProps) {
             {/* Price & Remove */}
             <div className="flex flex-col items-end gap-2 ml-4">
                 <span className="font-bold text-gray-900">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    {currency} {(item.price * item.quantity).toFixed(2)}
                 </span>
                 <Button
                     variant="ghost"

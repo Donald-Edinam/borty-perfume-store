@@ -15,10 +15,12 @@ export interface ProductWithCategory extends Product {
 
 interface ProductCardProps {
     product: ProductWithCategory;
-    currencySymbol?: string;
 }
 
-export function ProductCard({ product, currencySymbol = "$" }: ProductCardProps) {
+import { useCurrency } from "@/components/providers/currency-provider";
+
+export function ProductCard({ product }: ProductCardProps) {
+    const { currency } = useCurrency();
     const { addItem, updateQuantity } = useCartStore();
     const { items } = useCartStore();
     const [isMounted, setIsMounted] = useState(false);
@@ -96,7 +98,7 @@ export function ProductCard({ product, currencySymbol = "$" }: ProductCardProps)
 
                         {/* Price */}
                         <p className="text-xl font-bold text-gray-900 mb-4">
-                            {currencySymbol}{product.price.toFixed(2)}
+                            {currency} {product.price.toFixed(2)}
                         </p>
                     </Link>
 

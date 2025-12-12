@@ -6,11 +6,15 @@ import { Separator } from "@/components/ui/separator";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
+import { useCurrency } from "@/components/providers/currency-provider";
+
 export function CartSummary() {
+    const { currency } = useCurrency();
     const { totalPrice, totalItems } = useCartStore();
     const subtotal = totalPrice();
     const shipping = 10.00; // Flat rate for now
-    const tax = subtotal * 0.05; // 5% tax example
+    // Tax disabled for now
+    const tax = 0;
     const total = subtotal + shipping + tax;
 
     return (
@@ -20,23 +24,25 @@ export function CartSummary() {
             <div className="space-y-4 text-sm">
                 <div className="flex justify-between text-gray-600">
                     <span>Subtotal ({totalItems()} items)</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>{currency} {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                     <span>Shipping</span>
-                    <span>${shipping.toFixed(2)}</span>
+                    <span>{currency} {shipping.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
-                    <span>Tax (5%)</span>
-                    <span>${tax.toFixed(2)}</span>
-                </div>
+                {tax > 0 && (
+                    <div className="flex justify-between text-gray-600">
+                        <span>Tax</span>
+                        <span>{currency} {tax.toFixed(2)}</span>
+                    </div>
+                )}
             </div>
 
             <Separator className="my-4" />
 
             <div className="flex justify-between text-lg font-bold text-gray-900 mb-6">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{currency} {total.toFixed(2)}</span>
             </div>
 
             <Button className="w-full" size="lg" asChild>

@@ -4,6 +4,7 @@ import { ProductGallery } from "@/components/store/product-gallery";
 import { ProductNotes } from "@/components/store/product-notes";
 import { AddToCart } from "@/components/store/add-to-cart";
 import { RelatedProducts } from "@/components/store/related-products";
+import { ProductPrice } from "@/components/store/product-price";
 import { Product, ProductNotes as ProductNotesType } from "@/types/shop";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -86,9 +87,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                         </div>
                     </div>
 
-                    <div className="text-2xl font-semibold text-gray-900">
-                        ${product.price.toFixed(2)}
-                    </div>
+                    <ProductPrice price={product.price} className="text-2xl font-semibold text-gray-900" />
 
                     <div className="prose prose-sm text-gray-600 leading-relaxed max-w-none">
                         <p>{product.description}</p>
