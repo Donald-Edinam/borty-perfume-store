@@ -22,9 +22,12 @@ export const metadata = {
 };
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {
+    // Await searchParams
+    const resolvedParams = await searchParams;
+
     // Parse search params
     const params = new URLSearchParams();
-    Object.entries(searchParams).forEach(([key, value]) => {
+    Object.entries(resolvedParams).forEach(([key, value]) => {
         if (value) params.set(key, String(value));
     });
 
