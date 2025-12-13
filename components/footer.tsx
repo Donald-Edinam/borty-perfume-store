@@ -18,7 +18,7 @@ const Footer = () => {
       <footer className="border-t bg-gray-900 text-white">
         {/* Video Showcase Section */}
         <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent z-10 py-4"></div>
 
           <div className="relative h-[40vh] overflow-hidden">
             <video

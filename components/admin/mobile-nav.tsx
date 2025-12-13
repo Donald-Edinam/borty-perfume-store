@@ -25,7 +25,14 @@ export const MobileNav = () => {
     const moreRoutes = routes.filter((route) => !mainTabs.includes(route.label));
 
     // Helper to determine if a route is active
-    const isActive = (href: string) => pathname === href || pathname?.startsWith(`${href}/`);
+    const isActive = (href: string) => {
+        // Dashboard should only be active on exact match
+        if (href === "/dashboard") {
+            return pathname === "/dashboard";
+        }
+        // Other routes can use startsWith for sub-pages
+        return pathname === href || pathname?.startsWith(`${href}/`);
+    };
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 lg:hidden px-4 py-2">
