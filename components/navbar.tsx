@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+  const isAdmin = pathname?.startsWith("/dashboard");
 
   useEffect(() => {
     if (!isHomePage) return;
@@ -40,20 +41,23 @@ const Navbar = () => {
         <Logo className={isTransparent ? "!text-white" : ""} />
 
         {/* Desktop Menu */}
-        <NavMenu className="hidden md:block" isTransparent={isTransparent} />
+        {!isAdmin && <NavMenu className="hidden md:block" isTransparent={isTransparent} />}
 
         <div className="flex items-center gap-3">
-          <CartIndicator isTransparent={isTransparent} />
+          {!isAdmin && <CartIndicator isTransparent={isTransparent} />}
           <UserNav isTransparent={isTransparent} />
 
           {/* Mobile Menu */}
-          <div className="md:hidden">
-            <NavigationSheet isTransparent={isTransparent} />
-          </div>
+          {!isAdmin && (
+            <div className="md:hidden">
+              <NavigationSheet isTransparent={isTransparent} />
+            </div>
+          )}
         </div>
       </div>
     </nav>
   );
 };
+
 
 export default Navbar;

@@ -13,7 +13,7 @@ import {
     Users,
 } from "lucide-react";
 
-const routes = [
+export const routes = [
     {
         label: "Dashboard",
         icon: LayoutDashboard,
