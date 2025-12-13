@@ -9,7 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function RegisterPage() {
+import { Suspense } from "react";
+
+function RegisterForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl") || "/";
@@ -90,113 +92,121 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-            <Card className="w-full max-w-md">
-                <CardHeader>
-                    <CardTitle className="text-2xl">Create Account</CardTitle>
-                    <CardDescription>
-                        Sign up to start shopping for perfumes
-                    </CardDescription>
-                </CardHeader>
-                <form onSubmit={handleSubmit}>
-                    <CardContent className="space-y-4">
-                        {error && (
-                            <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md">
-                                {error}
-                            </div>
-                        )}
-
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Name *</Label>
-                            <Input
-                                id="name"
-                                name="name"
-                                type="text"
-                                placeholder="Ama Borty"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                                disabled={isLoading}
-                            />
+        <Card className="w-full max-w-md">
+            <CardHeader>
+                <CardTitle className="text-2xl">Create Account</CardTitle>
+                <CardDescription>
+                    Sign up to start shopping for perfumes
+                </CardDescription>
+            </CardHeader>
+            <form onSubmit={handleSubmit}>
+                <CardContent className="space-y-4">
+                    {error && (
+                        <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md">
+                            {error}
                         </div>
+                    )}
 
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email *</Label>
-                            <Input
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="email@bortystore.com"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                                disabled={isLoading}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="phone">Phone *</Label>
-                            <Input
-                                id="phone"
-                                name="phone"
-                                type="tel"
-                                placeholder="+233 XX XXX XXXX"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                disabled={isLoading}
-                            />
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password *</Label>
-                            <Input
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="••••••••"
-                                value={formData.password}
-                                onChange={handleChange}
-                                required
-                                disabled={isLoading}
-                            />
-                            <p className="text-xs text-muted-foreground">
-                                Minimum 6 characters
-                            </p>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="confirmPassword">Confirm Password *</Label>
-                            <Input
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                type="password"
-                                placeholder="••••••••"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                required
-                                disabled={isLoading}
-                            />
-                        </div>
-                    </CardContent>
-
-                    <CardFooter className="flex flex-col gap-4 mt-5">
-                        <Button
-                            type="submit"
-                            className="w-full"
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Name *</Label>
+                        <Input
+                            id="name"
+                            name="name"
+                            type="text"
+                            placeholder="Ama Borty"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
                             disabled={isLoading}
-                        >
-                            {isLoading ? "Creating account..." : "Create Account"}
-                        </Button>
+                        />
+                    </div>
 
-                        <p className="text-sm text-muted-foreground text-center">
-                            Already have an account?{" "}
-                            <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl === "/" ? "" : callbackUrl)}`} className="text-primary hover:underline">
-                                Sign in
-                            </Link>
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email *</Label>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="email@bortystore.com"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            disabled={isLoading}
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="phone">Phone *</Label>
+                        <Input
+                            id="phone"
+                            name="phone"
+                            type="tel"
+                            placeholder="+233 XX XXX XXXX"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            disabled={isLoading}
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Password *</Label>
+                        <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="••••••••"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            disabled={isLoading}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            Minimum 6 characters
                         </p>
-                    </CardFooter>
-                </form>
-            </Card>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                        <Input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            placeholder="••••••••"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            required
+                            disabled={isLoading}
+                        />
+                    </div>
+                </CardContent>
+
+                <CardFooter className="flex flex-col gap-4 mt-5">
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Creating account..." : "Create Account"}
+                    </Button>
+
+                    <p className="text-sm text-muted-foreground text-center">
+                        Already have an account?{" "}
+                        <Link href={`/login?callbackUrl=${encodeURIComponent(callbackUrl === "/" ? "" : callbackUrl)}`} className="text-primary hover:underline">
+                            Sign in
+                        </Link>
+                    </p>
+                </CardFooter>
+            </form>
+        </Card>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <div className="min-h-screen flex items-center justify-center p-4">
+            <Suspense fallback={<div className="h-[600px] w-full max-w-md bg-white rounded-lg animate-pulse" />}>
+                <RegisterForm />
+            </Suspense>
         </div>
     );
 }
