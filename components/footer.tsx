@@ -15,7 +15,7 @@ const Footer = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* <div className="grow bg-muted" /> */}
-      <footer className="border-t">
+      <footer className="border-t bg-gray-900 text-white">
         {/* Video Showcase Section */}
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent z-10"></div>
@@ -51,28 +51,28 @@ const Footer = () => {
           <div className="py-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-x-8 gap-y-10 px-6 xl:px-0">
             <div className="col-span-full xl:col-span-2">
               {/* Logo */}
-              <Logo />
+              <Logo className="!text-white" />
 
-              <p className="mt-4 text-muted-foreground">
+              <p className="mt-4 text-gray-400">
                 Your destination for premium fragrances. Discover your signature scent with us.
               </p>
             </div>
 
             <div>
-              <h6 className="font-medium">Shop</h6>
+              <h6 className="font-medium text-white">Shop</h6>
               <ul className="mt-6 space-y-4">
                 <li>
-                  <Link href="/shop" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/shop" className="text-gray-400 hover:text-white transition-colors">
                     All Products
                   </Link>
                 </li>
                 <li>
-                  <Link href="/shop?sort=newest" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/shop?sort=newest" className="text-gray-400 hover:text-white transition-colors">
                     New Arrivals
                   </Link>
                 </li>
                 <li>
-                  <Link href="/shop" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/shop" className="text-gray-400 hover:text-white transition-colors">
                     Best Sellers
                   </Link>
                 </li>
@@ -80,15 +80,15 @@ const Footer = () => {
             </div>
 
             <div>
-              <h6 className="font-medium">Company</h6>
+              <h6 className="font-medium text-white">Company</h6>
               <ul className="mt-6 space-y-4">
                 <li>
-                  <Link href="/about" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
                     Contact Us
                   </Link>
                 </li>
@@ -96,20 +96,20 @@ const Footer = () => {
             </div>
 
             <div>
-              <h6 className="font-medium">Account</h6>
+              <h6 className="font-medium text-white">Account</h6>
               <ul className="mt-6 space-y-4">
                 <li>
-                  <Link href="/profile" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/profile" className="text-gray-400 hover:text-white transition-colors">
                     My Profile
                   </Link>
                 </li>
                 <li>
-                  <Link href="/orders" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/orders" className="text-gray-400 hover:text-white transition-colors">
                     Order History
                   </Link>
                 </li>
                 <li>
-                  <Link href="/login" className="text-muted-foreground hover:text-foreground">
+                  <Link href="/login" className="text-gray-400 hover:text-white transition-colors">
                     Login / Register
                   </Link>
                 </li>
@@ -118,36 +118,36 @@ const Footer = () => {
 
             {/* Subscribe Newsletter */}
             <div className="col-span-2">
-              <h6 className="font-medium">Stay up to date</h6>
+              <h6 className="font-medium text-white">Stay up to date</h6>
               <form className="mt-6 flex items-center gap-2">
                 <Input
                   type="email"
                   placeholder="Enter your email"
-                  className="grow max-w-64"
+                  className="grow max-w-64 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
                 />
                 <Button>Subscribe</Button>
               </form>
             </div>
           </div>
-          <Separator />
+          <Separator className="bg-gray-800" />
           <div className="py-8 flex flex-col-reverse sm:flex-row items-center justify-between gap-x-2 gap-y-5 px-6 xl:px-0">
             {/* Copyright */}
-            <span className="text-muted-foreground">
+            <span className="text-gray-400">
               &copy; {new Date().getFullYear()}{" "}
-              <Link href="/" target="_blank">
+              <Link href="/" target="_blank" className="hover:text-white transition-colors">
                 Borty&apos;s Perfume Store
               </Link>
               . All rights reserved.
             </span>
 
-            <div className="flex items-center gap-5 text-muted-foreground">
-              <Link href="#" target="_blank" aria-label="Instagram">
+            <div className="flex items-center gap-5 text-gray-400">
+              <Link href="#" target="_blank" aria-label="Instagram" className="hover:text-white transition-colors">
                 <Instagram className="h-5 w-5" />
               </Link>
-              <Link href="#" target="_blank" aria-label="Facebook">
+              <Link href="#" target="_blank" aria-label="Facebook" className="hover:text-white transition-colors">
                 <Facebook className="h-5 w-5" />
               </Link>
-              <Link href="#" target="_blank" aria-label="Twitter">
+              <Link href="#" target="_blank" aria-label="Twitter" className="hover:text-white transition-colors">
                 <X className="h-5 w-5" />
               </Link>
             </div>
