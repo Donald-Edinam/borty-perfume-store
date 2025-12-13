@@ -14,6 +14,7 @@ import { updateOrderStatus } from "@/lib/actions/orders";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import Link from "next/link";
 
 type OrderWithDetails = Order & {
     user: User;
@@ -22,9 +23,10 @@ type OrderWithDetails = Order & {
 
 interface OrderClientProps {
     data: OrderWithDetails[];
+    currency: string;
 }
 
-export function OrderClient({ data }: OrderClientProps) {
+export function OrderClient({ data, currency }: OrderClientProps) {
     const router = useRouter();
     const [loadingId, setLoadingId] = useState<string | null>(null);
 
@@ -53,7 +55,7 @@ export function OrderClient({ data }: OrderClientProps) {
                             <TableHead>Customer</TableHead>
                             <TableHead>Total</TableHead>
                             <TableHead>Payment</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead>Delivery Status</TableHead>
                             <TableHead>Date</TableHead>
                             <TableHead>Actions</TableHead>
                         </TableRow>
@@ -68,7 +70,7 @@ export function OrderClient({ data }: OrderClientProps) {
                                         <span className="text-xs text-muted-foreground">{order.user.email}</span>
                                     </div>
                                 </TableCell>
-                                <TableCell>${Number(order.totalAmount).toFixed(2)}</TableCell>
+                                <TableCell>{currency}{Number(order.totalAmount).toFixed(2)}</TableCell>
                                 <TableCell>{order.paymentStatus}</TableCell>
                                 <TableCell>
                                     <Select
@@ -90,9 +92,10 @@ export function OrderClient({ data }: OrderClientProps) {
                                 </TableCell>
                                 <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                                 <TableCell>
-                                    {/* Placeholder for View Details - for now just listed */}
-                                    <Button variant="ghost" size="sm">
-                                        <Eye className="h-4 w-4 mr-2" /> Details
+                                    <Button variant="ghost" size="sm" asChild>
+                                        <Link href={`/dashboard/orders/${order.id}`}>
+                                            <Eye className="h-4 w-4 mr-2" /> Details
+                                        </Link>
                                     </Button>
                                 </TableCell>
                             </TableRow>
