@@ -28,7 +28,7 @@ export function UserNav({ isTransparent }: UserNavProps) {
 
     if (!session?.user) {
         return (
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
                 <Button
                     variant={isTransparent ? "ghost" : "ghost"}
                     asChild
