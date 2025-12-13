@@ -2,75 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
-  DribbbleIcon,
-  GithubIcon,
-  TwitchIcon,
-  TwitterIcon,
+  Instagram,
+  Facebook,
   X,
 } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "./logo";
 
-const footerSections = [
-  {
-    title: "Product",
-    links: [
-      {
-        title: "Overview",
-        href: "#",
-      },
-      {
-        title: "Features",
-        href: "#",
-      },
-      {
-        title: "Solutions",
-        href: "#",
-      },
-      {
-        title: "Tutorials",
-        href: "#",
-      },
-      {
-        title: "Pricing",
-        href: "#",
-      },
-      {
-        title: "Releases",
-        href: "#",
-      },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      {
-        title: "Blog",
-        href: "#",
-      },
-      {
-        title: "Newsletter",
-        href: "#",
-      },
-      {
-        title: "Events",
-        href: "#",
-      },
-      {
-        title: "Help centre",
-        href: "#",
-      },
-      {
-        title: "Tutorials",
-        href: "#",
-      },
-      {
-        title: "Support",
-        href: "#",
-      },
-    ],
-  },
-];
+
 
 const Footer = () => {
   return (
@@ -97,12 +36,12 @@ const Footer = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Discover Your Signature Scent</h2>
               <p className="text-lg text-gray-300 max-w-2xl mb-8">Explore our curated collection of premium fragrances and find the perfect scent that defines you.</p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                  Shop Now
-                </button>
-                <button className="bg-transparent hover:bg-white/10 border border-white text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                  View Collections
-                </button>
+                <Button asChild className="bg-primary hover:bg-primary/90 text-white font-medium py-6 px-8 rounded-lg transition-colors">
+                  <Link href="/shop">Shop Now</Link>
+                </Button>
+                <Button asChild variant="outline" className="bg-transparent hover:bg-white/10 border border-white text-white font-medium py-6 px-8 rounded-lg transition-colors hover:text-white">
+                  <Link href="/shop">View Collections</Link>
+                </Button>
               </div>
             </div>
           </div>
@@ -115,28 +54,67 @@ const Footer = () => {
               <Logo />
 
               <p className="mt-4 text-muted-foreground">
-                Design amazing digital experiences that create more happy in the
-                world.
+                Your destination for premium fragrances. Discover your signature scent with us.
               </p>
             </div>
 
-            {footerSections.map(({ title, links }) => (
-              <div key={title}>
-                <h6 className="font-medium">{title}</h6>
-                <ul className="mt-6 space-y-4">
-                  {links.map(({ title, href }) => (
-                    <li key={title}>
-                      <Link
-                        href={href}
-                        className="text-muted-foreground hover:text-foreground"
-                      >
-                        {title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            <div>
+              <h6 className="font-medium">Shop</h6>
+              <ul className="mt-6 space-y-4">
+                <li>
+                  <Link href="/shop" className="text-muted-foreground hover:text-foreground">
+                    All Products
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/shop?sort=newest" className="text-muted-foreground hover:text-foreground">
+                    New Arrivals
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/shop" className="text-muted-foreground hover:text-foreground">
+                    Best Sellers
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h6 className="font-medium">Company</h6>
+              <ul className="mt-6 space-y-4">
+                <li>
+                  <Link href="/about" className="text-muted-foreground hover:text-foreground">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="text-muted-foreground hover:text-foreground">
+                    Contact Us
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h6 className="font-medium">Account</h6>
+              <ul className="mt-6 space-y-4">
+                <li>
+                  <Link href="/profile" className="text-muted-foreground hover:text-foreground">
+                    My Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/orders" className="text-muted-foreground hover:text-foreground">
+                    Order History
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/login" className="text-muted-foreground hover:text-foreground">
+                    Login / Register
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
             {/* Subscribe Newsletter */}
             <div className="col-span-2">
@@ -163,14 +141,14 @@ const Footer = () => {
             </span>
 
             <div className="flex items-center gap-5 text-muted-foreground">
-              <Link href="#" target="_blank">
+              <Link href="#" target="_blank" aria-label="Instagram">
+                <Instagram className="h-5 w-5" />
+              </Link>
+              <Link href="#" target="_blank" aria-label="Facebook">
+                <Facebook className="h-5 w-5" />
+              </Link>
+              <Link href="#" target="_blank" aria-label="Twitter">
                 <X className="h-5 w-5" />
-              </Link>
-              <Link href="#" target="_blank">
-                <GithubIcon className="h-5 w-5" />
-              </Link>
-              <Link href="#" target="_blank">
-                <GithubIcon className="h-5 w-5" />
               </Link>
             </div>
           </div>

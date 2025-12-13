@@ -149,7 +149,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
                         {/* Product Grid */}
                         <Suspense fallback={<ProductGridSkeleton />}>
-                            <ProductGrid products={products} currencySymbol="$" />
+                            <ProductGrid products={products} />
                         </Suspense>
 
                         {/* Pagination */}

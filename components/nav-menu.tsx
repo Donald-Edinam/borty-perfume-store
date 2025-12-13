@@ -26,7 +26,7 @@ export const NavMenu = ({ isTransparent, ...props }: NavMenuProps) => (
             isTransparent && "!bg-transparent !text-white hover:!text-white/90 hover:!bg-white/10"
           )}
         >
-          <Link href="#">Home</Link>
+          <Link href="/">Home</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
@@ -37,7 +37,7 @@ export const NavMenu = ({ isTransparent, ...props }: NavMenuProps) => (
             isTransparent && "!bg-transparent !text-white hover:!text-white/90 hover:!bg-white/10"
           )}
         >
-          <Link href="#">Blog</Link>
+          <Link href="/shop">Shop</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
@@ -48,7 +48,7 @@ export const NavMenu = ({ isTransparent, ...props }: NavMenuProps) => (
             isTransparent && "!bg-transparent !text-white hover:!text-white/90 hover:!bg-white/10"
           )}
         >
-          <Link href="#">About</Link>
+          <Link href="/about">About</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
       <NavigationMenuItem>
@@ -59,7 +59,7 @@ export const NavMenu = ({ isTransparent, ...props }: NavMenuProps) => (
             isTransparent && "!bg-transparent !text-white hover:!text-white/90 hover:!bg-white/10"
           )}
         >
-          <Link href="#">Contact Us</Link>
+          <Link href="/contact">Contact Us</Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
     </NavigationMenuList>

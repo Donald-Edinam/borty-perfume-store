@@ -8,10 +8,9 @@ import { ProductCard, type ProductWithCategory } from "./product-card";
 
 interface ProductGridProps {
     products: ProductWithCategory[];
-    currencySymbol?: string;
 }
 
-export function ProductGrid({ products, currencySymbol = "$" }: ProductGridProps) {
+export function ProductGrid({ products }: ProductGridProps) {
     if (products.length === 0) {
         return (
             <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
@@ -32,7 +31,7 @@ export function ProductGrid({ products, currencySymbol = "$" }: ProductGridProps
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map((product) => (
-                <ProductCard key={product.id} product={product} currencySymbol={currencySymbol} />
+                <ProductCard key={product.id} product={product} />
             ))}
         </div>
     );

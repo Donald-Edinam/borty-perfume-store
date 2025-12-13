@@ -13,9 +13,9 @@ import { Separator } from "@/components/ui/separator";
 export const dynamic = "force-dynamic";
 
 interface ProductPageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
