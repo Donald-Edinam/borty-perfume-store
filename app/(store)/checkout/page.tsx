@@ -33,6 +33,11 @@ export default function CheckoutPage() {
     useEffect(() => {
         async function loadProfile() {
             if (session?.user) {
+                if (session.user.role === "ADMIN") {
+                    router.push("/dashboard");
+                    return;
+                }
+
                 const profile = await getUserProfile();
                 if (profile) {
                     setFormData(prev => ({

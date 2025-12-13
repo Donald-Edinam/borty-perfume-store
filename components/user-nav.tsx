@@ -89,12 +89,14 @@ export function UserNav({ isTransparent }: UserNavProps) {
                         Profile
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                    <Link href="/orders" className="cursor-pointer">
-                        <ShoppingBag className="mr-2 h-4 w-4" />
-                        My Orders
-                    </Link>
-                </DropdownMenuItem>
+                {session.user.role !== "ADMIN" && (
+                    <DropdownMenuItem asChild>
+                        <Link href="/orders" className="cursor-pointer">
+                            <ShoppingBag className="mr-2 h-4 w-4" />
+                            My Orders
+                        </Link>
+                    </DropdownMenuItem>
+                )}
                 {session.user.role === "ADMIN" && (
                     <DropdownMenuItem asChild>
                         <Link href="/dashboard" className="cursor-pointer">

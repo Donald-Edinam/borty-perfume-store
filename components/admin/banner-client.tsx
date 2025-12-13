@@ -51,8 +51,8 @@ export function BannerClient({ data }: BannerClientProps) {
                 <h2 className="text-3xl font-bold tracking-tight">Banners ({data.length})</h2>
                 <BannerForm />
             </div>
-            <div className="rounded-md border bg-white">
-                <Table>
+            <div className="rounded-md border bg-white overflow-x-auto">
+                <Table className="min-w-[600px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Image</TableHead>

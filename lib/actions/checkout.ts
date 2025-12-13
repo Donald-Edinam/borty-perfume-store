@@ -44,6 +44,10 @@ export async function createOrder(data: CheckoutData) {
             return { success: false, error: "You must be logged in to place an order." };
         }
 
+        if (session.user.role === "ADMIN") {
+            return { success: false, error: "Administrators are not allowed to place orders." };
+        }
+
         // Use email to find userId if needed, or rely on session.user.id if added to session type
         // Assuming session.user has id via callbacks, but if not we can query by email.
         // For safety, let's query user by email from DB to get ID.

@@ -16,8 +16,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     <Sidebar />
                 </aside>
 
-                <main className="flex-1 lg:pl-64">
-                    <div className="p-8 pb-20 lg:pb-8">
+                <main className="flex-1 lg:pl-64 w-full max-w-full overflow-x-hidden">
+                    <div className="p-4 pb-20 lg:p-8 lg:pb-8">
                         {children}
                     </div>
                 </main>

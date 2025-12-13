@@ -23,8 +23,8 @@ export default async function CustomersPage() {
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-3xl font-bold tracking-tight">Customers ({customers.length})</h2>
                 </div>
-                <div className="rounded-md border bg-white">
-                    <Table>
+                <div className="rounded-md border bg-white overflow-x-auto">
+                    <Table className="min-w-[700px]">
                         <TableHeader>
                             <TableRow>
                                 <TableHead>User</TableHead>

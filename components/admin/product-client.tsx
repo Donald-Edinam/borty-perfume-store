@@ -56,8 +56,8 @@ export function ProductClient({ data, categories }: ProductClientProps) {
                 <h2 className="text-3xl font-bold tracking-tight">Products ({data.length})</h2>
                 <ProductForm categories={categories} />
             </div>
-            <div className="rounded-md border bg-white">
-                <Table>
+            <div className="rounded-md border bg-white overflow-x-auto">
+                <Table className="min-w-[800px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead>Image</TableHead>
